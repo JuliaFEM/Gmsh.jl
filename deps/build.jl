@@ -5,7 +5,7 @@ const verbose = "--verbose" in ARGS
 const prefix = Prefix(get([a for a in ARGS if a != "--verbose"], 1, joinpath(@__DIR__, "usr")))
 products = [
     LibraryProduct(prefix, ["libgmsh"], :libgmsh),
-    ExecutableProduct(prefix, "gmsh", :gmsh),
+#   ExecutableProduct(prefix, "gmsh", :gmsh),
 ]
 
 # Download binaries from hosted location
