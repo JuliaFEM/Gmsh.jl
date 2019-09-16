@@ -46,6 +46,13 @@ gmsh.write("t1.msh")
 gmsh.finalize()
 ```
 
+There are two possible options for binaries. First one is to use binaries created
+using BinaryBuilder (https://github.com/ahojukka5/GmshBuilder), and the other
+one is to use official SDK binaries. To use SDK binaries, set environment
+variable `GMSH_USE_SDK=true` before building package. At this time, Linux SDK
+for version 4.4.1 is not working with Julia. Expect it to be solved on version
+4.5 ..? See [this issue](https://gitlab.onelab.info/gmsh/gmsh/issues/611).
+
 [gitter-img]: https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]: https://gitter.im/JuliaFEM/JuliaFEM.jl
 
