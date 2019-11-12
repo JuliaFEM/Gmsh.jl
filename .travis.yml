@@ -1,13 +1,17 @@
 language: julia
 
 os:
-  - linux
-  - osx
+    - linux
+    - osx
 
 julia:
-  - 1.2
-  - 1.3
-  - nightly
+    - 1.2
+    - 1.3
+    - nightly
+
+env:
+    - GMSH_USE_SDK=true
+    - GMSH_USE_SDK=false
 
 after_success:
     - julia -e 'cd(Pkg.dir("Gmsh")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
