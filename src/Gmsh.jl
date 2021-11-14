@@ -3,6 +3,8 @@
 
 module Gmsh
 
+using Libdl
+
 deps_jl = joinpath(@__DIR__, "..", "deps", "deps.jl")
 if !isfile(deps_jl)
   s = """
