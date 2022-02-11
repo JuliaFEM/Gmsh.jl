@@ -8,8 +8,8 @@ using Libdl
 deps_jl = joinpath(@__DIR__, "..", "deps", "deps.jl")
 if !isfile(deps_jl)
   s = """
-  Package GridapGmsh not installed properly.
-  Run Pkg.build(\"GridapGmsh\"), restart Julia and try again.
+  Package Gmsh.jl not installed properly.
+  Run Pkg.build(\"Gmsh\"), restart Julia and try again.
   """
   error(s)
 end
@@ -27,8 +27,8 @@ if GMSH_FOUND
   else
       s = """
       Gmsh not found in system paths.
-      Install Gmsh or export path to Gmsh and rebuild the project.
-      Run Pkg.build(\"GridapGmsh\"), restart Julia and try again.
+      Renstall Gmsh.jl or export `GMSHROOT` that points to a Gmsh installation and rebuild the project.
+      Run Pkg.build(\"Gmsh\"), restart Julia and try again.
       """
       @warn s
   end
@@ -36,7 +36,7 @@ if GMSH_FOUND
   macro check_if_loaded()
     quote
       if ! GMSH_FOUND
-        error("GridapGmsh is not loaded or installed properly.")
+        error("Gmsh is not loaded or installed properly.")
       end
     end
   end
