@@ -4,11 +4,9 @@ authors = ["Jukka Aho <ahojukka5@gmail.com>"]
 version = "0.2"
 
 [deps]
-Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 gmsh_jll = "630162c2-fc9b-58b3-9910-8442a8a132e6"
 
 [compat]
-Reexport = "1"
 gmsh_jll = "=4.10.2"
 julia = "1"
 

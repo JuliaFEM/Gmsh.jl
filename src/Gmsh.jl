@@ -1,9 +1,9 @@
 module Gmsh
-using Reexport
 
 import gmsh_jll
 include(gmsh_jll.gmsh_api)
-@reexport import .gmsh
+import .gmsh
+export gmsh
 
 """
     Gmsh.initialize(; finalize_atexit=true)
