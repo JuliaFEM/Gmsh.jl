@@ -1,8 +1,8 @@
 # This file reimplements gmsh/tutorial/t1.geo in Julia.
 # See the corresponding Python tutorial for detailed comments.
-using Gmsh: gmsh
+using Gmsh: Gmsh, gmsh
 
-gmsh.initialize()
+Gmsh.initialize()
 
 gmsh.model.add("t1")
 
@@ -39,4 +39,4 @@ if "-gui" in ARGS
     gmsh.fltk.run()
 end
 
-gmsh.finalize()
+Gmsh.finalize()
