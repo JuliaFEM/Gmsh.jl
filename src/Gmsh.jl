@@ -14,13 +14,25 @@ already initialized.
 
 The argument vector `argv` is passed to `gmsh.initialize`. `argv` can be used to pass
 command line options to Gmsh, see [Gmsh documentation for more
-details](https://gmsh.info/doc/texinfo/gmsh.html#index-Command_002dline-options).
+details](https://gmsh.info/doc/texinfo/gmsh.html#index-Command_002dline-options). Note that
+this wrapper prepends the program name to `argv` since Gmsh expects that to be the first
+entry.
 
 If `finalize_atexit` is `true` a Julia exit hook is added, which calls `finalize()`.
+
+**Example**
+```julia
+Gmsh.initialize(["-v", "0"]) # initialize with decreased verbosity
+```
 """
 function initialize(argv=String[]; finalize_atexit=true)
     if Bool(gmsh.isInitialized())
         return false
+    end
+    # Prepend a dummy program name in case argv only contains options
+    # see https://gitlab.onelab.info/gmsh/gmsh/-/issues/2112
+    if length(argv) > 0 && startswith(first(argv), "-")
+        argv = pushfirst!(copy(argv), "gmsh")
     end
     gmsh.initialize(argv)
     if finalize_atexit

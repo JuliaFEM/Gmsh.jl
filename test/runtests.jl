@@ -30,9 +30,14 @@ rm(path, recursive=true)
     @test Bool(gmsh.isInitialized())
     @test length(Base.atexit_hooks) == l
     Gmsh.finalize()
-    # argv
+    # argv with program name
     @test Gmsh.initialize(["gmsh", "-v", "0"])
     @test Bool(gmsh.isInitialized())
     @test gmsh.option.getNumber("General.Verbosity") == 0
+    Gmsh.finalize()
+    # argv without program name
+    @test Gmsh.initialize(["-v", "2"])
+    @test Bool(gmsh.isInitialized())
+    @test gmsh.option.getNumber("General.Verbosity") == 2
     Gmsh.finalize()
 end
