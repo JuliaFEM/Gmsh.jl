@@ -41,13 +41,13 @@ include(gmsh_api)
     end
 end
 
-@static if VERSION >= v"1.6"
-    """
-        Gmsh.use_gmsh_jll()
+"""
+    Gmsh.use_gmsh_jll()
 
-    Configure Gmsh to use the binary provided by gmsh_jll.
-    """
-    function use_gmsh_jll()
+Configure Gmsh to use the binary provided by gmsh_jll.
+"""
+function use_gmsh_jll()
+    @static if VERSION >= v"1.6"
         gmsh_provider = "gmsh_jll"
         @set_preferences!(
                           "gmsh_provider"=>gmsh_provider,
@@ -59,20 +59,20 @@ end
         Restart Julia for these changes to take effect.
         """
         @info msg
-        nothing
     end
+    nothing
 end
 
-@static if VERSION >= v"1.6"
-    """
-        Gmsh.use_system_gmsh([;gmsh_jl_dir])
-    
-    Configure Gmsh to use the binary provided by a system installation.
-    Key-word argument `gmsh_jl_dir` contains the path of the directory containing `gmsh.jl`, the file with
-    the Julia API of gmsh. This file needs to be installed as part of the SDK of gmsh.
-    If `gmsh_jl_dir` is omitted, this function will look for `gmsh.jl` in `LD_LIBRARY_PATH`.
-    """
-    function use_system_gmsh(;gmsh_jl_dir=nothing)
+"""
+    Gmsh.use_system_gmsh([;gmsh_jl_dir])
+
+Configure Gmsh to use the binary provided by a system installation.
+Key-word argument `gmsh_jl_dir` contains the path of the directory containing `gmsh.jl`, the file with
+the Julia API of gmsh. This file needs to be installed as part of the SDK of gmsh.
+If `gmsh_jl_dir` is omitted, this function will look for `gmsh.jl` in `LD_LIBRARY_PATH`.
+"""
+function use_system_gmsh(;gmsh_jl_dir=nothing)
+    @static if VERSION >= v"1.6"
         function findindir(route,fn)
             files = readdir(route,join=false)
             for file in files
@@ -98,14 +98,14 @@ end
         if gmsh_jl_dir === nothing
             msg = """
             Unable to find a Gmsh installation in the system.
-    
+
             We looked for the Gmsh Julia API file gmsh.jl in the folders in LD_LIBRARY_PATH.
-    
+
             You can also manualy specify the route with the key-word argument gmsh_jl_dir.
-    
+
             Example
             =======
-    
+
             julia> using Gmsh
             julia> using Gmsh.use_system_gmsh(;gmsh_jl_dir="path/to/gmsh.jl")
             """
@@ -119,13 +119,13 @@ end
         msg = """
         Gmsh preferences changed!
         The new preferences are:
-            gmsh_provider = $(gmsh_provider)
-            gmsh_jl_dir = $(gmsh_jl_dir)
+        gmsh_provider = $(gmsh_provider)
+        gmsh_jl_dir = $(gmsh_jl_dir)
         Restart Julia for these changes to take effect.
         """
         @info msg
-        nothing
     end
+    nothing
 end
 
 import .gmsh
