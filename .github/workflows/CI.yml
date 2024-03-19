@@ -36,6 +36,7 @@ jobs:
       - uses: codecov/codecov-action@v1
         with:
           file: lcov.info
+  test-custom-gmsh:
     name: Custom Gmsh installation with Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ github.event_name }}
     runs-on: ${{ matrix.os }}
     strategy:
