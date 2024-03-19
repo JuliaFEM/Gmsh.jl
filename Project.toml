@@ -4,6 +4,7 @@ authors = ["Jukka Aho <ahojukka5@gmail.com>"]
 version = "0.3.1"
 
 [deps]
+Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 Preferences = "21216c6a-2e73-6563-6e65-726566657250"
 gmsh_jll = "630162c2-fc9b-58b3-9910-8442a8a132e6"
 
