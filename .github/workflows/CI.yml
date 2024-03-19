@@ -56,7 +56,7 @@ jobs:
       - run: |
             julia --project=. -e '
             using Gmsh
-            using Gmsh.use_system_binary(;gmsh_jl_dir="gmsh-4.12.2-Linux64-sdk/lib")
+            Gmsh.use_system_binary(;gmsh_jl_dir="gmsh-4.12.2-Linux64-sdk/lib")
             '
       - uses: julia-actions/julia-runtest@v1
       - uses: julia-actions/julia-processcoverage@v1
