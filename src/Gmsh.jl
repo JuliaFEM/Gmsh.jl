@@ -1,7 +1,119 @@
 module Gmsh
 
-import gmsh_jll
-include(gmsh_jll.gmsh_api)
+# The logic behind the preferences is inspired by the one found in PetscCall.jl
+
+gmsh_provider = @load_preference("gmsh_provider","gmsh_jll"),
+
+if gmsh_provider ∉ ("gmsh_jll","system")
+    error("gmsh_provider is either gmsh_jll or system")
+end
+
+@static if gmsh_provider == "gmsh_jll"
+    import gmsh_jll
+    gmsh_jl_path = gmsh_jll.gmsh_api
+end
+
+@static if gmsh_provider == "system"
+    gmsh_jl_path = @load_preference("gmsh_jl_path","") 
+    if gmsh_jl_path == ""
+        error("Using a system gmsh installation but gmsh_jl_path not found in Preferences.toml file")
+    end
+end
+
+include(gmsh_jl_path)
+
+@static if gmsh_provider == "system"
+    # The definition of __init__ is taken from GridapGmsh.jl
+    function __init__()
+        @static if Sys.isunix()
+            Libdl.dlopen(gmsh.lib, Libdl.RTLD_LAZY | Libdl.RTLD_GLOBAL)
+        end
+    end
+end
+
+"""
+    Gmsh.use_gmsh_jll()
+
+Configure Gmsh to use the binary provided by gmsh_jll.
+"""
+function use_gmsh_jll()
+    gmsh_provider = "gmsh_jll"
+    @set_preferences!(
+        "gmsh_provider"=>gmsh_provider,
+       )
+    msg = """
+    Gmsh preferences changed!
+    The new preferences are:
+        gmsh_provider = $(gmsh_provider)
+    Restart Julia for these changes to take effect.
+    """
+    @info msg
+    nothing
+end
+
+"""
+    Gmsh.use_system_gmsh([;gmsh_jl_path])
+
+Configure Gmsh to use the binary provided by a system installation.
+Key-word argument `gmsh_jl_path` contains the full path to `gmsh.jl`, the file containing
+the Julia API of gmsh. This file needs to be installed as part of the SDK of gmsh.
+If `gmsh_jl_path` is omitted, this function will look for `gmsh.jl` in `LD_LIBRARY_PATH`.
+"""
+function use_system_gmsh(;gmsh_jl_path=nothing)
+    function findindir(route,fn)
+        files = readdir(route,join=false)
+        for file in files
+            if file == fn
+                gmsh_jl_path = joinpath(route,file)
+                return gmsh_jl_path
+            end
+        end
+        nothing
+    end
+    if gmsh_jl_path === nothing
+        if haskey(ENV,"LD_LIBRARY_PATH") && ENV["LD_LIBRARY_PATH"] != ""
+            routes = split(ENV["LD_LIBRARY_PATH"],':')
+            for route in routes
+                gmsh_jl_path = findindir(route,"gmsh.jl")
+                if gmsh_jl_path !== nothing
+                    @info "Gmsh Julia API found in the system at $(gmsh_jl_path)."
+                    break
+                end
+            end
+        end
+    end
+    if gmsh_jl_path === nothing
+        msg = """
+        Unable to find a Gmsh installation in the system.
+
+        We looked for the Gmsh Julia API file gmsh.jl in the folders in LD_LIBRARY_PATH.
+
+        You can also manualy specify the route with the key-word argument gmsh_jl_path.
+
+        Example
+        =======
+
+        julia> using Gmsh
+        julia> using Gmsh.use_system_gmsh(;gmsh_jl_path="path/to/gmsh.jl")
+        """
+        error(msg)
+    end
+    gmsh_provider = "system"
+    @set_preferences!(
+                      "gmsh_provider"=>gmsh_provider,
+                      "gmsh_jl_path"=>gmsh_jl_path,
+                     )
+    msg = """
+    Gmsh preferences changed!
+    The new preferences are:
+        gmsh_provider = $(gmsh_provider)
+        gmsh_jl_path = $(gmsh_jl_path)
+    Restart Julia for these changes to take effect.
+    """
+    @info msg
+    nothing
+end
+
 import .gmsh
 export gmsh
 
