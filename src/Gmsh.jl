@@ -35,6 +35,7 @@ include(gmsh_api)
     using Libdl
     # The definition of __init__ is taken from GridapGmsh.jl
     function __init__()
+        @show Sys.isunix()
         @static if Sys.isunix()
             Libdl.dlopen(gmsh.lib, Libdl.RTLD_LAZY | Libdl.RTLD_GLOBAL)
         end
