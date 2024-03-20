@@ -52,7 +52,7 @@ jobs:
           version: ${{ matrix.version }}
       - uses: julia-actions/julia-buildpkg@v1
       - name: Install Gmsh SDK dependencies
-          run: sudo apt-get install -y libglu1-mesa
+        run: sudo apt-get install -y libglu1-mesa
       - name: Install Gmsh SDK
         run: |
           curl -OL https://gmsh.info/bin/Linux/gmsh-4.12.2-Linux64-sdk.tgz
