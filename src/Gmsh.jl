@@ -33,14 +33,15 @@ include(gmsh_api)
 import .gmsh
 export gmsh
 
-#@static if gmsh_provider == "system"
-#    using Libdl
-#    function __init__()
-#        @static if Sys.isunix()
-#            Libdl.dlopen(gmsh.lib, Libdl.RTLD_LAZY | Libdl.RTLD_DEEPBIND)
-#        end
-#    end
-#end
+@static if gmsh_provider == "system"
+    using Libdl
+    function __init__()
+        @static if Sys.isunix()
+            @show gmsh.lib
+            Libdl.dlopen(gmsh.lib, Libdl.RTLD_LAZY | Libdl.RTLD_DEEPBIND)
+        end
+    end
+end
 
 """
     Gmsh.use_gmsh_jll()
