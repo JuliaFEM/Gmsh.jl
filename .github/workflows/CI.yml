@@ -37,7 +37,7 @@ jobs:
         with:
           file: lcov.info
   test-custom-gmsh:
-    name: Custom Gmsh with Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ github.event_name }}
+    name: Gmsh SDK - Julia ${{ matrix.version }} - ${{ matrix.os }} - ${{ github.event_name }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -51,12 +51,12 @@ jobs:
         with:
           version: ${{ matrix.version }}
       - uses: julia-actions/julia-buildpkg@v1
-      - name: install gmsh sdk
+      - name: Install Gmsh SDK
         run: |
           curl -OL https://gmsh.info/bin/Linux/gmsh-4.12.2-Linux64-sdk.tgz
           tar xvf gmsh-4.12.2-Linux64-sdk.tgz
           mv gmsh-4.12.2-Linux64-sdk /opt/
-      - name: configure Gmsh preferences
+      - name: Configure Gmsh preferences
         shell: julia --color=yes --project=. {0}
         run: |
             using Gmsh

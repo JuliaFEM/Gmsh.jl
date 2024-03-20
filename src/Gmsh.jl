@@ -18,26 +18,28 @@ end
 
 @static if gmsh_provider == "gmsh_jll"
     import gmsh_jll
-    gmsh_api = gmsh_jll.gmsh_api
+    const gmsh_api = gmsh_jll.gmsh_api
 end
 
 @static if gmsh_provider == "system"
-    gmsh_jl_dir = @load_preference("gmsh_jl_dir","") 
+    const gmsh_jl_dir = @load_preference("gmsh_jl_dir","") 
     if gmsh_jl_dir == ""
         error("Using a system gmsh installation but gmsh_jl_dir not found in Preferences.toml file")
     end
-    gmsh_api = joinpath(gmsh_jl_dir,"gmsh.jl")
+    const gmsh_api = joinpath(gmsh_jl_dir,"gmsh.jl")
 end
 
 include(gmsh_api)
+import .gmsh
+export gmsh
 
 @static if gmsh_provider == "system"
     using Libdl
     # The definition of __init__ is taken from GridapGmsh.jl
     function __init__()
-        @show Sys.isunix()
         @static if Sys.isunix()
             Libdl.dlopen(gmsh.lib, Libdl.RTLD_LAZY | Libdl.RTLD_GLOBAL)
+            println("gmsh.lib loaded")
         end
     end
 end
@@ -129,9 +131,6 @@ function use_system_gmsh(;gmsh_jl_dir=nothing)
     nothing
 end
 
-import .gmsh
-export gmsh
-
 """
     Gmsh.initialize(argv=String[]; finalize_atexit=true)
 
@@ -179,4 +178,4 @@ function finalize()
     end
 end
 
-end
+end # module
