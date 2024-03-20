@@ -36,13 +36,15 @@ export gmsh
 @static if gmsh_provider == "system"
     using Libdl
     function __init__()
+        # This is just to have a better idea why gmsh.lib is empty
         @static if Sys.isunix()
-            @show gmsh.libdir
-            @show gmsh.libname
-            @show gmsh.lib
-            gmsh_lib = joinpath(gmsh_jl_dir,"libgmsh.so")
-            @show gmsh_lib
-            Libdl.dlopen(gmsh_lib, Libdl.RTLD_LAZY | Libdl.RTLD_DEEPBIND)
+            if gmsh.lib == ""
+                gmsh_lib = joinpath(gmsh_jl_dir,"libgmsh")
+                Libdl.dlopen(gmsh_lib, Libdl.RTLD_LAZY | Libdl.RTLD_DEEPBIND)
+            end
+        end
+        if gmsh.lib == ""
+            error("The gmsh.jl API file was not able to find a gmsh libary. Some dependencies are provably not installed in the system.")
         end
     end
 end
