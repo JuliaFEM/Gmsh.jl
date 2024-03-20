@@ -35,11 +35,9 @@ export gmsh
 
 @static if gmsh_provider == "system"
     using Libdl
-    # The definition of __init__ is taken from GridapGmsh.jl
     function __init__()
         @static if Sys.isunix()
-            Libdl.dlopen(gmsh.lib, Libdl.RTLD_LAZY | Libdl.RTLD_GLOBAL)
-            println("gmsh.lib loaded")
+            Libdl.dlopen(gmsh.lib, Libdl.RTLD_LAZY | Libdl.RTLD_DEEPBIND)
         end
     end
 end
