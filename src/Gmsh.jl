@@ -37,8 +37,12 @@ export gmsh
     using Libdl
     function __init__()
         @static if Sys.isunix()
+            @show gmsh.libdir
+            @show gmsh.libname
             @show gmsh.lib
-            Libdl.dlopen(gmsh.lib, Libdl.RTLD_LAZY | Libdl.RTLD_DEEPBIND)
+            gmsh_lib = joinpath(gmsh_jl_dir,"libgmsh.so")
+            @show gmsh_lib
+            Libdl.dlopen(gmsh_lib, Libdl.RTLD_LAZY | Libdl.RTLD_DEEPBIND)
         end
     end
 end
